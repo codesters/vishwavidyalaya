@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block head_title %}{{ department.name }}{% endblock %}
+
+{% block page_title %}{{ department.name }}{% endblock %}
+{% block content %}
+<div class="row">
+    <h3>Details</h3>
+    <div class="span8 offset1">
+        {% if is_hod %}
+        <a href="{% url dept_update department.id %}" class="btn btn-success pull-right">Edit this Dept</a>
+        {% endif %}
+        <dl class="dl-horizontal">
+            <dt>Head of Dept</dt>
+            <dd>{{ department.hod|default:"Not Assigned" }}</dd>
+        </dl>
+    </div>
+</div>
+<div class="row">
+    <h3>Courses</h3>
+    <div class="span8 offset2">
+        <table class="table table-hover table-striped">
+            <thead>
+                <tr>
+                    <th>Course Name</th>
+                    <th>Coordinator</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for course in courses %}
+                <tr>
+                    <td><a href="{% url course_detail course.id %}">{{ course.name }}</a></td>
+                    <td><a href="{% url faculty_detail course.coordinator.id %}">{{ course.coordinator }}</a></td>
+                    <td><a href="{% url course_detail course.id %}" class="btn"><i class="icon-folder-open"></i> Details</a>
+                        {% if is_director or course.department.hod.user.username == user.username %}
+                        <a href="{% url course_update course.id %}" class="btn"><i class="icon-wrench"></i> Edit</a>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

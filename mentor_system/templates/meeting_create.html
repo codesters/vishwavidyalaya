@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block head_title %}Create new Mentee Meeting{% endblock %}
+{% block content %}
+<div class="row">
+    <h2>Mentee Meeting</h2>
+    <div class="btn-group">
+        <a href="/mentee/" class="btn btn-primary">Mentee Records</a>
+        <a href="/mentee/meetings/" class="btn">Mentee Meetings</a>
+    </div>
+</div>
+<div class="row">
+    <div class="span6 offset3">
+    <form method="post" action="">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button class="btn btn-primary" type="submit">Save</button>
+    </form>
+</div>
+</div>
+{% endblock %}

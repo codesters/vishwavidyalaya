@@ -26,12 +26,16 @@ THIRD_PARTY_APPS = (
     'django_extensions',
     'registration',
     'guardian',
+    'bootstrapform',
+    'widget_tweaks',
 )
 
 LOCAL_APPS = (
     'profiles',
+    'school',
     'academics',
-    'mentors',
+    'mentor_system',
+    'info',
 )
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
@@ -79,7 +83,7 @@ TEMPLATE_DIRS = (
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
     os.path.join(PROJECT_ROOT, 'templates'),
-    os.path.join(PROJECT_ROOT, 'mentors', 'templates'),
+    os.path.join(PROJECT_ROOT, 'school', 'templates'),
 )
 
 EMAIL_BACKEND = 'django.core.mail.backends.dummy.EmailBackend'
@@ -99,7 +103,7 @@ LANGUAGE_CODE = 'en-us'
 SITE_ID = 1
 USE_I18N = True
 USE_L10N = True
-USE_TZ = True
+USE_TZ = False
 
 # List of finder classes that know how to find static files in
 # various locations.
@@ -127,6 +131,17 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
+
+TEMPLATE_CONTEXT_PROCESSORS = (
+    'django.contrib.auth.context_processors.auth',
+    'django.core.context_processors.debug',
+    'django.core.context_processors.i18n',
+    'django.core.context_processors.media',
+    'django.core.context_processors.request',
+    'django.core.context_processors.static',
+    'vishwavidyalaya.context_processors.navigation',
+)
+
 
 ROOT_URLCONF = 'vishwavidyalaya.urls'
 

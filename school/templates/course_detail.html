@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block head_title %}{{ course.name }}{% endblock %}
+
+{% block page_title %}{{ course.name }}{% endblock %}
+{% block page_subtitle %}under {{ course.department }} Department{% endblock %}
+{% block content %}
+<div class="row">
+    <h3>Details</h3>
+    <div class="span10 offset1">
+        <dl class="dl-horizontal">
+            <dt>Duration</dt>
+            <dd>{{ course.duration }}</dd>
+            <dt>Coordinator</dt>
+            <dd>{{ course.coordinator|default:"Not Assigned" }}</dd>
+        </dl>
+    </div>
+</div>
+<div class="row">
+    <h3>Sections</h3>
+    <div class="span8 offset2">
+        <table class="table table-hover table-striped">
+            <thead>
+                <tr>
+                    <th>Section Name</th>
+                    <th>Group1 Mentor</th>
+                    <th>Group2 Mentor</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for section in sections %}
+                <tr>
+                    <td><a href="{% url section_detail section.id %}">{{ section.name }} {{ section.batch }}</a></td>
+                    <td></td>
+                    <td></td>
+                    <td><a href="{% url section_detail section.id %}" class="btn"><i class="icon-folder-open"></i> Details</a>
+                        {% if is_hod or is_director %}
+                        <a href="{% url section_update section.id %}" class="btn"><i class="icon-wrench"></i> Edit</a>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

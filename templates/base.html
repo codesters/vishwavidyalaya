@@ -1,99 +1,123 @@
-<!DOCTYPE HTML>
+{% load url from future %}
+{% load tags %}
+<!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>{% block head_title %}Amity University - CSE Dept{% endblock %}</title>
+  <head>
+    <meta charset="utf-8">
+    <title>{% block head_title %}VishwaVidyalaya{% endblock %}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{{ STATIC_URL }}css/bootstrap.min.css" media="screen">
+    <meta name="description" content="This is college management solution from codesters">
+    <meta name="author" content="Karambir Singh Nain">
 
-    <style>
-        body {
-            margin-top: 10px;
-        }
-        .header {
-            margin-bottom: 30px;
-        }
-        .content {
-            margin-bottom: 60px;
-        }
-        .footer {
-            padding: 100px 0;
-        }
+    <!-- Le styles -->
+    <link href="{{ STATIC_URL }}css/bootstrap.min.css" rel="stylesheet">
+    <style type="text/css">
+      body {
+        padding-top: 40px;
+        padding-bottom: 40px;
+      }
+      #page-title {
+          padding: 20px 0 10px;
+          background-color: #9d261d;
+          color: #ffffff !important;
+          margin-bottom: 20px;
+      }
+      #page-title small {
+        color: #ffffff;
+      }
     </style>
-    {% block extra_head %}{% endblock %}
-</head>
+    <link href="{{ STATIC_URL }}css/bootstrap-responsive.css" rel="stylesheet">
+
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="../assets/js/html5shiv.js"></script>
+    <![endif]-->
+
+        {% block extra_head %}{% endblock %}
+  </head>
+
 <body>
 {% block body %}
-<div class="container">
-<div class="header">
-    <h1>Amity University Haryana</h1>
-    <p class="lead">Computer Science Dept</p>
-    <div class="row clearfix">
-        <ul class="nav nav-tabs">
-            <li><a href="/">Home</a></li>
-            {% if user.is_authenticated %}
-            <li><a href="/mentee/">Mentee Records</a></li>
-            <li><a href="/academics/marks/">Marks</a></li>
-            <li><a href="/academics/attendance/">Attendance</a></li>
-            <li><a href="/profiles/faculty/">Faculty</a></li>
-            <li class="pull-right"><a href="/accounts/logout/">Logout</a></li>
-            <li class="pull-right"><a href="/admin/">Admin</a></li>
-            <li class="pull-right"><a href="/accounts/profile/">Account</a></li>
-            {% else %}
-            <li class="pull-right"><a href="/accounts/register/">Register</a></li>
-            <li class="pull-right"><a href="/accounts/login/">Login</a></li>
-            {% endif %}
+<div class="navbar navbar-fixed-top">
+    <div class="navbar-inner">
+    <div class="container">
+        <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+        </button>
+        <a class="brand" href="/">VishwaVidyalaya</a>
+        <div class="nav-collapse collapse">
+        <ul class="nav pull-right">
+            <li class="{% active request "^/$" %}"><a href="/"><i class="icon-home"></i> Home</a></li>
+        {% if user.is_authenticated %}
+            <li class="{% active request "^/academics/" %}"><a href="#contact"><i class="icon-book"></i> Academics</a></li>
+            <li class="{% active request "^/mentor-system/" %}"><a href="#about"><i class="icon-map-marker"></i> Mentor System</a></li>
+            <li class="{% active request "^/school/" %} dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-th"></i> School <b class="caret"></b></a>
+                <ul class="dropdown-menu">
+                    <li><a href="{% url 'dept_list' %}"><i class="icon-briefcase"></i> Departments</a></li>
+                    <li><a href="{% url 'course_list' %}"><i class="icon-tag"></i> Courses</a></li>
+                    <li><a href="{% url 'section_list' %}"><i class="icon-pencil"></i> Sections</a></li>
+                {% if is_hod or is_director %}
+                    <li class="divider"></li>
+                    <li class="nav-header"><i class="icon-plus"></i> Add New</li>
+                    {% if is_director %}
+                    <li><a href="{% url 'dept_create' %}"><i class="icon-briefcase"></i> Department</a></li>
+                    {% endif %}
+                    <li><a href="{% url 'dept_create' %}"><i class="icon-tag"></i> Course</a></li>
+                    <li><a href="{% url 'dept_create' %}"><i class="icon-book"></i> Subject</a></li>
+                {% endif %}
+                </ul>
+            </li>
+            <li class="{% active request "^/profiles/" %} dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-user"></i> Profiles <b class="caret"></b></a>
+                <ul class="dropdown-menu">
+                    <li><a href="{% url 'director_list' %}">Director</a></li>
+                    <li><a href="{% url 'faculty_list' %}">Faculty</a></li>
+                    <li><a href="{% url 'student_list' %}">Student</a></li>
+                {% if is_director or is_hod or is_coordinator %}
+                    <li class="divider"></li>
+                    <li class="nav-header"><i class="icon-plus"></i> Add New</li>
+                    <li><a href="{% url 'student_create' %}">Student</a></li>
+                    {% if is_director %}
+                    <li><a href="{% url 'faculty_create' %}">Faculty</a></li>
+                    {% endif %}
+                {% endif %}
+                </ul>
+            </li>
+            <li class="{% active request '^/accounts/' %} dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-asterisk"></i> {{ user.username }} <b class="caret"></b></a>
+                <ul class="dropdown-menu">
+                    <li><a href="{% url 'user_profile' %}"><i class="icon-picture"></i> My Profile</a></li>
+                    <li><a href="{% url 'user_profile' %}"><i class="icon-wrench"></i> Settings</a></li>
+                    <li class="divider"></li>
+                    <li><a href="{% url 'auth_logout' %}"><i class="icon-off"></i> Logout</a></li>
+                </ul>
+            </li>
+        {% else %}
+            <li class="{% active request "^/accounts/register/$" %}"><a href="{% url 'registration_register' %}"><i class="icon-download-alt"></i> Register</a></li>
+            <li class="{% active request "^/accounts/login/$" %}"><a href="{% url 'auth_login' %}"><i class="icon-download"></i> Login</a></li>
+        {% endif %}
         </ul>
+      </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar-inner -->
+</div><!--/.navbar -->
+<div class="row" id="page-title">
+    <div class="container">
+        <div class="page-header">
+            <h1>{% block page_title %}{% endblock %}  <small>{% block page_subtitle %}{% endblock %}</small></h1>
+        </div><!--/.page-header -->
     </div>
-</div>
-<div class="row content">
-    {% block content %}
-    <div class="hero-unit">
-        <h1>Welcome to CSE Dept home</h1>
-        <p class="lead">Manage all student records at one place</p>
-        <a href="/accounts/login/" class="btn btn-large btn-primary">Login Now</a>
-    </div>
-    <div class="row">
-        <div class="span4">
-            <h3>Mentor System</h3>
-            <p>Manage your mentees details and all meetings here.</p>
-            <a href="/mentee/" class="btn">Check Out</a>
-        </div>
-        <div class="span4">
-            <h3>Attendance</h3>
-            <p>Update your students' attendance here</p>
-            <a href="/academics/attendance/" class="btn">Check Out</a>
-        </div>
-        <div class="span4">
-            <h3>Marks</h3>
-            <p>Manage and update all the internal marks.</p>
-            <a href="/academics/marks/" class="btn">Check Out</a>
-        </div>
-    </div>
-    {% endblock %}
-</div>
-<div class="footer">
-    <div class="span3">
-        <ul class="unstyled">
-            <li><a href="#">about</a></li>
-            <li><a href="#">contact</a></li>
-            <li><a href="http://codesters.org">dev team</a></li>
-        </ul>
-    </div>
-    <div class="span5">
-        <p>This project is powered by Django and Python.</p>
-        <p>Made by <a href="http://codesters.org/">Codesters</a></p>
-    </div>
-    <div class="span3 pull-right">
-        <ul class="unstyled">
-            <li><a href="http://amizone.net/">amizone</a></li>
-            <li><a href="http://amity.edu/">amity.edu</a></li>
-            <li><a href="http://amity.edu/gurgaon/">amity gurgaon</a></li>
-        </ul>
-    </div>
-</div>
-</div>
+</div><!--/.page-title -->
+<div class="container content">
+    {% block content %}{% endblock %}
+</div> <!-- /container -->
 {% endblock %}
+<!-- Le javascript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script src="{{ STATIC_URL }}js/jquery.min.js"></script>
+<script src="{{ STATIC_URL }}js/bootstrap.min.js"></script>
 {% block extra_js %}{% endblock %}
 </body>
 </html>

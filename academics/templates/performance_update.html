@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% load bootstrap %}
+
+{% block head_title %}Update Student Performance{% endblock %}
+{% block content %}
+<div class="row">
+    <h2>Update Marks and Attendance</h2>
+    <a href="/academics/performance/" class="btn btn-primary pull-left">Go Back</a>
+</div>
+<div class="row">
+    <div class="span6 offset3 well">
+        <h3>{{ student }}</h3>
+        <form method="post" action="">
+            {% csrf_token %}
+            {{ form|bootstrap }}
+            <button class="btn btn-primary" type="submit">Update</button>
+        </form>
+    </div>
+</div>
+{% endblock %}
